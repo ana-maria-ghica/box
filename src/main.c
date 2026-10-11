@@ -18,6 +18,8 @@ int main(int argc, char**argv) {
     
     // parsez inputul din cli
     parse_cli(argv, &args);
+    if (args.rootfs == NULL || args.hostname == NULL)
+        return 1;
 
     // creez containerul
     return run_container(&args);

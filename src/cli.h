@@ -3,6 +3,7 @@
 
 struct cli_args {
     char* rootfs;
+    char* hostname;
     char **programs;
 };
 
