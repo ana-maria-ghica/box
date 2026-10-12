@@ -9,6 +9,7 @@
 #include "cli.h"
 #include "container.h"
 #include "child.h"
+#include "cgroups.h"
 
 #define CHILD_STACK_SIZE 65536
 
@@ -39,6 +40,9 @@ int run_container(struct cli_args* args) {
     CHECK(pid);
     close(pipe_fd[0]);  // inchid capatul de citire
 
+    // implementarea cgroups - pana sa trimita byte-ul prin pipe
+    cgroups_init(pid, args);
+
     // parintele scrie in pipe
     ret = write(pipe_fd[1], "a", sizeof(char));
     CHECK(ret);
@@ -48,6 +52,13 @@ int run_container(struct cli_args* args) {
     ret = waitpid(pid, &status, 0);
     CHECK(ret);
 
+    // sterg directoarele create de cgroup
+    char cgroup_path_remove[256];
+    snprintf(cgroup_path_remove, sizeof(cgroup_path_remove), "/sys/fs/cgroup/box-%d", pid);
+    ret = rmdir(cgroup_path_remove);
+    if (ret == -1)
+        perror("rmdir");
+        
     // eliberez stiva
     free(child_stack);
 

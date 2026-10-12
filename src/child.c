@@ -37,7 +37,7 @@ int child_function(void* arg) {
     CHECK(ret);
 
     // modific rootfs-ul -----------------------------------------
-    setup_rootfs(args->rootfs);
+    setup_rootfs();
 
     // montez /proc
     ret = mount("proc", "/proc", "proc", 0, NULL);
@@ -75,6 +75,7 @@ int child_function(void* arg) {
     ret = sethostname(args->hostname, strlen(args->hostname));
     CHECK(ret);
 
+    // execut efectiv programul -----------------------------------------
     execve(args->programs[0], args->programs, NULL);
     perror("execve");
     _exit(127);

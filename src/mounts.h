@@ -4,6 +4,6 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-void setup_rootfs(char* rootfs);
+void setup_rootfs();
 
 #endif

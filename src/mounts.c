@@ -11,7 +11,7 @@
 
 #define PATH_LEN_MAX 4096
 
-void setup_rootfs(char* rootfs) {
+void setup_rootfs() {
     int ret;
     char* new_root = "./overlay/merged";
 
@@ -39,7 +39,8 @@ void setup_rootfs(char* rootfs) {
 
     // creez directorul old_root
     char old_root[PATH_LEN_MAX];
-    snprintf(old_root, sizeof(old_root), "%s/old_root", rootfs);
+    // snprintf(old_root, sizeof(old_root), "%s/old_root", rootfs);
+    snprintf(old_root, sizeof(old_root), "%s/old_root", new_root);   // new_root, nu rootfs
 
     ret = mkdir(old_root, 0777);
     CHECK_IGNORE_EEXIST(ret, "mkdir");
