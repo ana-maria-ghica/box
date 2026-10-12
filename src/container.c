@@ -35,7 +35,7 @@ int run_container(struct cli_args* args) {
     s.args = args;
     s.pipe = pipe_fd;
 
-    pid_t pid = clone(child_function, stackTop, CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWIPC | SIGCHLD, &s);
+    pid_t pid = clone(child_function, stackTop, CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWIPC | CLONE_NEWNS | SIGCHLD, &s);
     CHECK(pid);
     close(pipe_fd[0]);  // inchid capatul de citire
 

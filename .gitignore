@@ -1,0 +1,10 @@
+# binare si obiecte compilate
+box
+*.o
+*.a
+
+# alpine - rootfs descarcat (se poate lua din script)
+alpine/
+
+# straturile overlay (scrierile din container)
+overlay/

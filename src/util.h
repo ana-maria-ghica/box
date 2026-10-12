@@ -14,4 +14,14 @@
         }                                                                                            \
     } while(0)
 
+
+#define CHECK_IGNORE_EEXIST(ret, message)   \
+    do {                                    \
+        if (ret == -1 && EEXIST != errno) { \
+            perror(message);                \
+            exit(1);                        \
+        }                                   \
+    } while(0)                              
+
+
 #endif
