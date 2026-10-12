@@ -4,6 +4,7 @@
 #include "util.h"
 #include "container.h"
 #include "mounts.h"
+#include "security.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -75,6 +76,9 @@ int child_function(void* arg) {
     ret = sethostname(args->hostname, strlen(args->hostname));
     CHECK(ret);
 
+    // restrictionez capabilitatile ------------------------------
+    restrict_process();
+    
     // execut efectiv programul -----------------------------------------
     execve(args->programs[0], args->programs, NULL);
     perror("execve");

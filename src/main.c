@@ -10,7 +10,7 @@
 
 int main(int argc, char**argv) {
     if (argc < 5) {
-        fprintf(stderr, "Usage: ./box run --rootfs <directory> <program> [args...]\n");
+        fprintf(stderr, "Usage: ./box run --rootfs <directory> --hostname <name> <program> [args...]\n");
         return 1;
     }
 
