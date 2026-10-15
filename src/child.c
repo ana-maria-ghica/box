@@ -5,6 +5,7 @@
 #include "container.h"
 #include "mounts.h"
 #include "security.h"
+#include "network.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -78,6 +79,9 @@ int child_function(void* arg) {
 
     // restrictionez capabilitatile ------------------------------
     restrict_process();
+
+    // setez network-ul containerului ------------------------------
+    setup_network_container(args);
     
     // execut efectiv programul -----------------------------------------
     execve(args->programs[0], args->programs, NULL);

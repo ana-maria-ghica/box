@@ -8,6 +8,7 @@ struct cli_args {
     long pid_max;
     long mem_max;
     double cpu_max;
+    char* ip;
 };
 
 void parse_cli(char** argv, struct cli_args* args);

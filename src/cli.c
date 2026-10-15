@@ -48,6 +48,9 @@ void parse_cli(char** argv, struct cli_args* args) {
                 args->cpu_max = atof(argv[counter + 1]);
                 counter += 2; 
 
+            } else if (strcmp(argv[counter], "--net") == 0) {
+                args->ip = argv[counter + 1];
+                counter += 2;
             } else {
                 break;
             }

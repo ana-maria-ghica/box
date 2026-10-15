@@ -10,6 +10,7 @@
 #include "container.h"
 #include "child.h"
 #include "cgroups.h"
+#include "network.h"
 
 #define CHILD_STACK_SIZE 65536
 
@@ -36,12 +37,15 @@ int run_container(struct cli_args* args) {
     s.args = args;
     s.pipe = pipe_fd;
 
-    pid_t pid = clone(child_function, stackTop, CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWIPC | CLONE_NEWNS | SIGCHLD, &s);
+    pid_t pid = clone(child_function, stackTop, CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWNET | SIGCHLD, &s);
     CHECK(pid);
     close(pipe_fd[0]);  // inchid capatul de citire
 
     // implementarea cgroups - pana sa trimita byte-ul prin pipe
     cgroups_init(pid, args);
+
+    // setez network-ul hostului
+    setup_network_host(pid);
 
     // parintele scrie in pipe
     ret = write(pipe_fd[1], "a", sizeof(char));
