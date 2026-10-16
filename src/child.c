@@ -7,14 +7,21 @@
 #include "security.h"
 #include "network.h"
 
-#include <sys/syscall.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
-#include <errno.h>
+#include <wait.h>
+
+static pid_t child_pid;
+
+static void forward_signal(int sig) {
+    if (child_pid > 0)
+        // paseaza semnalul copilului
+        kill(child_pid, sig);
+}
 
 int child_function(void* arg) {
     int ret;
@@ -84,9 +91,35 @@ int child_function(void* arg) {
     setup_network_container(args);
     
     // execut efectiv programul -----------------------------------------
-    execve(args->programs[0], args->programs, NULL);
-    perror("execve");
-    _exit(127);
 
-    return 0;
+    // implementez mini-init
+    pid_t pid = fork();
+    child_pid = pid;
+
+    if (pid == 0) {
+        execve(args->programs[0], args->programs, NULL);
+        perror("execve");
+        _exit(127);
+    }
+
+    
+    int status;
+    pid_t reaped;
+    while ((reaped = waitpid(-1, &status, 0)) > 0) {
+        // am cules un copil: shell-ul sau un orfan
+        if (reaped == pid) {
+            // programul real a murit; init se termina
+            break;
+        }
+        // altfel: era un orfan; continui bucla
+    }
+
+    // parintele - procesul init
+    signal(SIGTERM, forward_signal);
+    signal(SIGINT, forward_signal);
+
+    if (WIFEXITED(status))
+        return WEXITSTATUS(status);
+
+    return 1;
 }

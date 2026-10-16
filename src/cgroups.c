@@ -7,6 +7,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 #define PATH_SIZE 256
 
@@ -43,7 +45,7 @@ void cgroups_init(int pid, struct cli_args* args) {
     CHECK_IGNORE_EEXIST(ret, "mkdir");
 
     // activez controllerele
-    write_file("/sys/fs/cgroup/cgroup.subtree_control", "+pids +memory +cpu\n");
+    write_file("/sys/fs/cgroup/cgroup.subtree_control", "+pids +memory +cpu");
 
     // scriu limitele
     char value[32];

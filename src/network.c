@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 
 void run_command(char** args) {
+    // fprintf(stderr, "running: %s %s %s...\n", args[0], args[1] ? args[1] : "", args[2] ? args[2] : "");
     int ret;
     pid_t pid = fork();
 

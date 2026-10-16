@@ -2,6 +2,7 @@
 #define CLI_H
 
 struct cli_args {
+    char* command;
     char* rootfs;
     char* hostname;
     char **programs;
@@ -9,6 +10,7 @@ struct cli_args {
     long mem_max;
     double cpu_max;
     char* ip;
+    char* name;
 };
 
 void parse_cli(char** argv, struct cli_args* args);

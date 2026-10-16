@@ -7,5 +7,8 @@ struct intern_struct {
 };
 
 int run_container(struct cli_args *args);
+int ps_container();
+int exec_container(struct cli_args* args);
+int stop_container(struct cli_args* args);
 
 #endif
